@@ -10,13 +10,14 @@
  */
 
 defined('ABSPATH') || exit;
-
+//gppa_default_operators
 class WPGPPAextraCondition {
 
     public static function init(){
-        add_action( 'gform_admin_pre_render', array(__CLASS__, 'set_conditional') );
+        //add_action( 'gform_admin_pre_render', array(__CLASS__, 'set_conditional') );
         add_filter( 'gppa_strings', array(__CLASS__, 'condition_humans_label') );
-        add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_process_filter_default'), 10, 4 );
+        //add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_process_filter_default'), 10, 4 );
+        add_filter( 'gppa_default_operators', array(__CLASS__, 'rewrite_default_operators') );
     }
 
     public static function set_conditional( $form ) {
@@ -54,7 +55,7 @@ function set_rule_info(str, objectType, ruleIndex, selectedFieldId, selectedValu
         return $strings;
     }
 
-    public function custom_process_filter_default( $gf_query_where, $args ) {
+    public static function custom_process_filter_default( $gf_query_where, $args ) {
         /**
 		 * @var $filter_value
 		 * @var $filter
@@ -143,6 +144,21 @@ function set_rule_info(str, objectType, ruleIndex, selectedFieldId, selectedValu
 		return $gf_query_where;
     }
 
+    public static function rewrite_default_operators() {
+		return array(
+			'is',
+			'isnot',
+			'>',
+			'>=',
+			'<',
+			'<=',
+			'contains',
+			'starts_with',
+			'ends_with',
+            'like',
+            'is_contained_in',
+		);
+	}
 }
 
 WPGPPAextraCondition::init();
