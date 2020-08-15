@@ -6,7 +6,7 @@
  * Plugin URI: https://github.com/evgrezanov/wp-gppa-extra-condition
  * Author: Evgeniy Rezanov
  * Author URI: https://www.upwork.com/fl/evgeniirezanov
- * Version: 1.1
+ * Version: 1.3
  */
 
 defined('ABSPATH') || exit;
@@ -14,9 +14,10 @@ defined('ABSPATH') || exit;
 class WPGPPAextraCondition {
 
     public static function init(){
+		require plugin_dir_path( __FILE__ ) . 'class-gppa-object.php';
         add_filter( 'gppa_strings', array(__CLASS__, 'condition_humans_label') );
 		add_filter( 'gppa_default_operators', array(__CLASS__, 'rewrite_default_operators') );
-		add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_contain_in_process_filter_default'), 10, 4 );
+		//add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_contain_in_process_filter_default'), 10, 4 );
     }
 
     public static function condition_humans_label( $strings ) {
@@ -40,7 +41,7 @@ class WPGPPAextraCondition {
 		);
 	}
 
-	public static function custom_contain_in_process_filter_default( $gf_query_where, $args ) {
+	public static function tst_custom_contain_in_process_filter_default( $gf_query_where, $args ) {
 		global $wpdb;
 		/**
 		 * @var $filter_value
