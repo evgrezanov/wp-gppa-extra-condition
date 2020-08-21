@@ -130,7 +130,8 @@ class GPPA_Object_Type_GF_Entry_Rewrite extends GPPA_Object_Type_GF_Entry {
 			$operator,
 			$filter_value
 		);
-
+		error_log('---------------');
+		error_log($gf_query_where);
 		return $gf_query_where;
 
 	}

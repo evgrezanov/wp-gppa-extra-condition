@@ -6,7 +6,7 @@
  * Plugin URI: https://github.com/evgrezanov/wp-gppa-extra-condition
  * Author: Evgeniy Rezanov
  * Author URI: https://www.upwork.com/fl/evgeniirezanov
- * Version: 1.3
+ * Version: 1.5.0
  */
 
 defined('ABSPATH') || exit;
@@ -14,10 +14,10 @@ defined('ABSPATH') || exit;
 class WPGPPAextraCondition {
 
     public static function init(){
-		require plugin_dir_path( __FILE__ ) . 'class-gppa-object.php';
+		//require plugin_dir_path( __FILE__ ) . 'class-gppa-object.php';
         add_filter( 'gppa_strings', array(__CLASS__, 'condition_humans_label') );
 		add_filter( 'gppa_default_operators', array(__CLASS__, 'rewrite_default_operators') );
-		//add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_contain_in_process_filter_default'), 10, 4 );
+		add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_contain_in_process_filter_default'), 10, 4 );
     }
 
     public static function condition_humans_label( $strings ) {
@@ -41,7 +41,7 @@ class WPGPPAextraCondition {
 		);
 	}
 
-	public static function tst_custom_contain_in_process_filter_default( $gf_query_where, $args ) {
+	public static function custom_contain_in_process_filter_default( $gf_query_where, $args ) {
 		global $wpdb;
 		/**
 		 * @var $filter_value
@@ -62,22 +62,22 @@ class WPGPPAextraCondition {
 			$gf_query_where[ $filter_group_index ] = array();
 		}
 		
-		$operator     = GF_Query_Condition::IN;
+		$operator     = 'IN';
 		$filter_value = $wpdb->esc_sql($filter_value);
 		
-
-		if ( is_numeric( $filter_value ) ) {
-			$filter_value = floatval( $filter_value );
-		}
-
+		//$fvalue = exploid(', ', $filter_value);
+		//-----------------------------------------
+		$fvalue = array_map('trim',explode(",",$filter_value));
+		$filter_value = $fvalue;
+		//-----------------------------------------
+		$fvalue = $wpdb->esc_sql($fvalue);
+		
 		if ( is_array( $filter_value ) ) {
 			foreach( $filter_value as &$_filter_value ) {
 				$_filter_value = new GF_Query_Literal( $_filter_value );
 			}
 			unset( $_filter_value );
 			$filter_value = new GF_Query_Series( $filter_value );
-		} else {
-			$filter_value = new GF_Query_Literal( $filter_value );
 		}
 
 		$gf_query_where[ $filter_group_index ][] = new GF_Query_Condition(
@@ -85,7 +85,6 @@ class WPGPPAextraCondition {
 			$operator,
 			$filter_value
 		);
-		var_dump($gf_query_where);
 		return $gf_query_where;
     }
 
