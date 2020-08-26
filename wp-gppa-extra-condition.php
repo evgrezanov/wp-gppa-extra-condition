@@ -6,7 +6,7 @@
  * Plugin URI: https://github.com/evgrezanov/wp-gppa-extra-condition
  * Author: Evgeniy Rezanov
  * Author URI: https://www.upwork.com/fl/evgeniirezanov
- * Version: 1.6.1-beta
+ * Version: 1.6.2-beta
  */
 
 defined('ABSPATH') || exit;
@@ -64,8 +64,6 @@ class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
 
 		if ( strtoupper($filter['operator']) != 'IS_CONTAINED_IN' ):
 			return $gf_query_where;
-			var_dump($gf_query_where);
-			die('1');
 		endif;
 
 		if ( ! isset( $gf_query_where[ $filter_group_index ] ) ) {
@@ -74,27 +72,9 @@ class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
 		
 		// Correct operator for IS_CONTAINED_IN array
 		$operator     = 'IN';
-		$filter_value = $wpdb->esc_sql($filter_value);
+		$filter_value = esc_sql($filter_value);
 		
 		// Trim string array and exploid values
-		
-		/*
-		# Correct query should look like:
-		SELECT 
-			DISTINCT `t1`.`id` 
-		FROM 
-			`wpstg0_gf_entry` AS `t1` 
-		LEFT JOIN `wpstg0_gf_entry_meta` AS `m2` ON (`m2`.`entry_id` = `t1`.`id` AND `m2`.`meta_key` = 4) 
-		WHERE (`t1`.`form_id` IN (2) 
-		AND ((
-  		`m2`.`meta_key` = 4 
-  		AND 
-    		`m2`.`meta_value` IN ('35789b', 'fa32f0', '7e88b9', 'b8627b', '81ce8b') ) ## <-- correct operator and $fvalue
-  		AND 
-   			`t1`.`status` != 'trash')) 
-		ORDER BY `t1`.`id` ASC 
-		LIMIT 1250
-		*/
 		$fvalue = array_map('trim',explode(",",$filter_value));
 		$filter_value = $fvalue;
 		
@@ -111,8 +91,7 @@ class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
 			$operator,
 			$filter_value
 		);
-		var_dump($gf_query_where);
-		die('2');
+		
 		return $gf_query_where;
     }
 
