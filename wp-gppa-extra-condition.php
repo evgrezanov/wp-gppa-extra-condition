@@ -11,7 +11,7 @@
 
 defined('ABSPATH') || exit;
 
-class WPGPPAextraCondition {
+class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
 
     public static function init(){
 		//require plugin_dir_path( __FILE__ ) . 'class-gppa-object.php';
@@ -20,6 +20,7 @@ class WPGPPAextraCondition {
 		// Re-write default operators
 		add_filter( 'gppa_default_operators', array(__CLASS__, 'rewrite_default_operators') );
 		// Re-write query operators before sql query
+		//== 1. Here i add filter to my function
 		add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_contain_in_process_filter_default'), 10, 4 );
     }
 
@@ -59,9 +60,12 @@ class WPGPPAextraCondition {
 		 * @var $property_id
 		 */
 		extract($args);
-		
+
+
 		if ( strtoupper($filter['operator']) != 'IS_CONTAINED_IN' ):
 			return $gf_query_where;
+			var_dump($gf_query_where);
+			die('1');
 		endif;
 
 		if ( ! isset( $gf_query_where[ $filter_group_index ] ) ) {
@@ -72,9 +76,10 @@ class WPGPPAextraCondition {
 		$operator     = 'IN';
 		$filter_value = $wpdb->esc_sql($filter_value);
 		
-		// tream string array and exploid
+		// Trim string array and exploid values
+		
 		/*
-		# query should look like
+		# Correct query should look like:
 		SELECT 
 			DISTINCT `t1`.`id` 
 		FROM 
@@ -84,7 +89,7 @@ class WPGPPAextraCondition {
 		AND ((
   		`m2`.`meta_key` = 4 
   		AND 
-    		`m2`.`meta_value` IN ('35789b', 'fa32f0', '7e88b9', 'b8627b', '81ce8b') ) ## <-- correct operator
+    		`m2`.`meta_value` IN ('35789b', 'fa32f0', '7e88b9', 'b8627b', '81ce8b') ) ## <-- correct operator and $fvalue
   		AND 
    			`t1`.`status` != 'trash')) 
 		ORDER BY `t1`.`id` ASC 
@@ -100,12 +105,14 @@ class WPGPPAextraCondition {
 			unset( $_filter_value );
 			$filter_value = new GF_Query_Series( $filter_value );
 		}
-
+		
 		$gf_query_where[ $filter_group_index ][] = new GF_Query_Condition(
 			new GF_Query_Column( rgar( $property, 'value' ), (int) $primary_property_value ),
 			$operator,
 			$filter_value
 		);
+		var_dump($gf_query_where);
+		die('2');
 		return $gf_query_where;
     }
 
