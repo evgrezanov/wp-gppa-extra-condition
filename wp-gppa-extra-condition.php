@@ -14,7 +14,6 @@ defined('ABSPATH') || exit;
 class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
 
     public static function init(){
-		//require plugin_dir_path( __FILE__ ) . 'class-gppa-object.php';
 		// Add string label for new operator
 		add_filter( 'gppa_strings', array(__CLASS__, 'condition_humans_label') );
 		// Re-write default operators
