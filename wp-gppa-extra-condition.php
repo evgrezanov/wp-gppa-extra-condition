@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: WP-GPPA-extra-condition
- * Description: Add extra condition "IS CONTAIN IN"
+ * Description: Add extra condition "IS CONTAIN IN". Tested with GP Populate Anything Version 1.0-beta-4.91 and Gravity Forms Version 2.4.20
  * Plugin URI: https://github.com/evgrezanov/wp-gppa-extra-condition
  * Author: Evgeniy Rezanov
  * Author URI: https://www.upwork.com/fl/evgeniirezanov
- * Version: 1.6.2-beta
+ * Version: 1.7
  */
 
 defined('ABSPATH') || exit;
@@ -19,7 +19,6 @@ class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
 		// Re-write default operators
 		add_filter( 'gppa_default_operators', array(__CLASS__, 'rewrite_default_operators') );
 		// Re-write query operators before sql query
-		//== 1. Here i add filter to my function
 		add_filter( 'gppa_object_type_gf_entry_filter', array(__CLASS__, 'custom_contain_in_process_filter_default'), 10, 4 );
     }
 
@@ -90,7 +89,6 @@ class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
 			$operator,
 			$filter_value
 		);
-		
 		return $gf_query_where;
     }
 
