@@ -6,13 +6,12 @@
  * Plugin URI: https://github.com/evgrezanov/wp-gppa-extra-condition
  * Author: Evgeniy Rezanov
  * Author URI: https://www.upwork.com/fl/evgeniirezanov
- * Version: 1.7
+ * Version: 1.8
  */
 
 defined('ABSPATH') || exit;
 
-class WPGPPAextraCondition extends GPPA_Object_Type_GF_Entry{
-
+class WPGPPAextraCondition {
     public static function init(){
 		// Add string label for new operator
 		add_filter( 'gppa_strings', array(__CLASS__, 'condition_humans_label') );
